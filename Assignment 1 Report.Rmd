@@ -1,0 +1,44 @@
+---
+title: "DAPT 622 Assignment 1"
+author: "Daniel Erb"
+date: "January 14, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Load Libraries and Arrange Data}
+library(knitr)
+
+candy_data <- read.table("G:/My Drive/vcu/Spring 2019/Statistics/Assignments/Assignment 1/DAPT_622_Assignment_1/Assignment_Materials/CandyBars.txt",sep=',',header=TRUE)
+
+cd_sub <- candy_data[,c("Oz.pkg","Calories","Total.fat.g"
+                  ,"Saturated.fat.g","Cholesterol.g"
+                  ,"Sodium.mg","Carbohydrate.g"
+                  ,"Dietary.fiber.g","Sugars.g"
+                  ,"Protein.g","Vitamin.A..RDI"
+                  ,"Vitamin.C..RDI","Calcium..RDI"
+                  ,"Iron..RDI")]
+
+```
+
+# Part 1 - Exploratory Data Analysis
+
+## Question 1
+
+Perform the following exploratory data analysis tasks: 
+
+1. Consider all of the numeric variables (i.e. all of the variables except Brand and Name): Determine the variance/covariance matrix and the correlation matrix of these variables.  Interpret briefly what you see.
+
+```{r Generate Matrices}
+
+#Get variance-covariance matrix
+covmat <- cov(cd_sub)
+kable(covmat,caption = "Variance/Covariance Matrix for Candy Data", digits = 2)
+
+#Get correlation matrix
+corrmat <- cor(cd_sub)
+kable(corrmat,caption = "Correlation Matrix for Candy Data", digits = 2)
+```
