@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r Load Libraries and Arrange Data}
 library(knitr)
-
+library(kableExtra)
 candy_data <- read.table("G:/My Drive/vcu/Spring 2019/Statistics/Assignments/Assignment 1/DAPT_622_Assignment_1/Assignment_Materials/CandyBars.txt",sep=',',header=TRUE)
 
 cd_sub <- candy_data[,c("Oz.pkg","Calories","Total.fat.g"
