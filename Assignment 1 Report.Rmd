@@ -9,14 +9,16 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r Load Libraries and Arrange Data}
-library(knitr)
+---
+
+```{r Load Libraries and Arrange Data, message = FALSE}
+#library(knitr)
 library(kableExtra)
 library(magrittr)
 library(DT)
 library(dplyr)
-library(ggplot2)
-library(GGally)
+library(corrplot)
+
 candy_data <- read.table("G:/My Drive/vcu/Spring 2019/Statistics/Assignments/Assignment 1/DAPT_622_Assignment_1/Assignment_Materials/CandyBars.txt",sep=',',header=TRUE)
 
 cd_sub <- candy_data[,c("Oz.pkg","Calories","Total.fat.g"
@@ -37,7 +39,7 @@ Perform the following exploratory data analysis tasks:
 
 1. Consider all of the numeric variables (i.e. all of the variables except Brand and Name): Determine the variance/covariance matrix and the correlation matrix of these variables.  Interpret briefly what you see.
 
-```{r Generate Matrices}
+```{r Generate Matrices, message = FALSE}
 
 #Get variance-covariance matrix
 covmat <- cov(cd_sub)
@@ -57,15 +59,58 @@ The variance/covariance matrix and correlation matrix show several positive corr
 
 There are very few negative correlations within the candy bar data set. Those negative correlations that do exist are of less magnitude than many of the positive correlations. The strongest negative correlation (-0.305) exists between carbohydrates and cholesterol. Other negative correlations are below -0.25 but do tend to be between vitamins and either carbohydrates, sugars, total fat, saturated fat, or calories. 
 
-```{r Generate Scatterplot Matrix}
+## Question 2
 
-ggcorr(cd_sub, palette = "RdBu", label = TRUE, hjust = 0.75)
+2. Construct a scatterplot matrix of the variables specified in #1. Comment on what you observe. 
 
-ggpairs(cd_sub)
+```{r Generate Scatterplot Matrix, message = FALSE}
 
-ggplot(cd_sub) + 
-  plotmatrix()
+pairs(~Oz.pkg
+      +Calories
+      +Total.fat.g
+      +Saturated.fat.g
+      +Cholesterol.g
+      +Sodium.mg
+      +Carbohydrate.g
+      +Dietary.fiber.g
+      +Sugars.g
+      +Protein.g
+      +Vitamin.A..RDI
+      +Vitamin.C..RDI
+      +Calcium..RDI
+      +Iron..RDI
+      ,data = cd_sub
+      #,lower.panel=panel.smooth, upper.panel=panel.cor
+      #,pch=20
+      , gap = .2
+      , main="Candy Scatterplot Matrix")
+
 
 ```
+
+The scatterplot matrix for the candy bar data shows several noteworthy patterens. Ounces could potentially have a linear relationship with carbohydrates. Calories seems to have a linear relationship with total fat. Total fat also seems to be linearly related to saturated fat and protein. Carbohydrates also seem linearly related to sugar. Other relationships may be difficult to assess from a scatterplot with so many attributes represented.
+
+## Question 3
+
+3. Construct a color map on correlations for the variables specified in #1. Comment on what you observe.
+
+```{r Color Map Creation} 
+
+corrmat <- cor(cd_sub)
+corrplot(corrmat,method="color")
+
+```
+
+The color map of the correlations show very similar results as the variance/covariance and correlation matrices. They are quite a few strongly positive correlations. There are also far fewer strong negative correlations.
+
+## Question 4
+
+4. Use a probability plot to assess the multivariate normality of the variables specified in #1.  Interpret.
+
+```{r Probability Plot Creation}
    
+
+```
+
+---
 *Thanks!*
