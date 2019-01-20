@@ -2,10 +2,8 @@
 title: "DAPT 622 Assignment 1"
 author: "Daniel Erb"
 date: "January 14, 2019"
-output: 
-  html_document:
-    toc: true
-    toc_float: true
+output: html_document
+
 ---
 
 ```{r setup, include=FALSE}
@@ -137,7 +135,7 @@ Reconsider the candy bar data. Perform a Principal Component Analysis on this da
 
 Find and display the eigenvalues of the correlation matrix. Use these along with a Scree plot (and/or other means) to determine the number of principal components that are to be retained. How much of the variation in the data is explained by your chosen number of principal components? Remember that your goal is dimension reduction…so please be sensible in your choice of number of components
 
-```{r Find eigenvalues and scree plot creation}
+```{r Find eigenvalues and scree plot creation (A)}
 
 #Compute the correlation matrix
 
@@ -167,7 +165,7 @@ Considering the generated Scree plot as well as the biplot for the eigenvectors 
 
 Provide the loadings matrix.  What do you learn from this matrix? Using this matrix, and as best as possible, interpret the first two principal components (I will expect some interpretation).
 
-```{r loadings for pca}
+```{r loadings for pca (A)}
 
 #Loadings
 loadings <- pca$rotation
@@ -183,7 +181,7 @@ Principal component 2 shows only a few slightly positive values for carbohydrate
 
 Construct a biplot of the loadings and scores for the first two principal components. For this plot, color the observations based on Brand.  Are there any natural groupings of the observations? Are there any unusual observations? 
 
-```{r biplot construction}
+```{r biplot construction (A)}
 
 #Biplot with vectors labelled
 fviz_pca_biplot(pca, col.var = "black")
@@ -198,26 +196,73 @@ ggplot(data=as.data.frame(pca$x), aes(x=PC1, y=PC2,color = candy_data$Brand)) +
 
 ```
 
-For most of the data there are no immediately obvious groupings of candy brands. This is with one exception for Weider and for Hershey. Two data points for Weider have high principal component 2 values while having very small principal component 1 values. Five candy bars standout for Hershey in highly positive principal component 1 values. These 7 points may well be the outliers we observed in the normal quantile plot above.
+For most of the data points are not in immediately obvious groupings of candy brands. This is with one exception for Weider and for Hershey. Two data points for Weider have high principal component 2 values while having very small principal component 1 values. Five candy bars standout for Hershey in highly positive principal component 1 values. These 7 points may well be the outliers we observed in the normal quantile plot above.
 
 
+## Section B
+
+### Subsection i
+
+Find and display the eigenvalues of the correlation matrix. Use these along with a Scree plot (and/or other means) to determine the number of principal components that are to be retained. How much of the variation in the data is explained by your chosen number of principal components? Remember that your goal is dimension reduction…so please be sensible in your choice of number of components
+
+```{r Find eigenvalues and scree plot creation (B)}
+
+#Compute the correlation matrix
+
+ ##recall corrmat from above
+
+#compute the eigenvalues and eigenvectors
+
+ev <- eigen(covmat)
+ev$values
+ev$vectors
+
+# scale = TRUE allows for correlation matrix to be utilized
+# FALSE would allow for covariance matrix to be utilized
+pca <- prcomp(cd_sub, scale = FALSE)
+summary(pca)
+
+#(show plots)
+
+screeplot(pca, npcs = 14, type = "lines")
+
+```
+
+### Subsection ii
+
+Provide the loadings matrix.  What do you learn from this matrix? Using this matrix, and as best as possible, interpret the first two principal components (I will expect some interpretation).
+
+```{r loadings for pca (B)}
+
+#Loadings
+loadings <- pca$rotation
+loadings
+
+```
+
+### Subsection iii
+
+Construct a biplot of the loadings and scores for the first two principal components. For this plot, color the observations based on Brand.  Are there any natural groupings of the observations? Are there any unusual observations? 
+
+```{r biplot construction (B)}
+
+#Biplot with vectors labelled
+fviz_pca_biplot(pca, col.var = "black")
+
+#candyBar_scores <- as.data.frame(pca$x)
+ggplot(data=as.data.frame(pca$x), aes(x=PC1, y=PC2,color = candy_data$Brand)) +
+  geom_hline(yintercept=0) + 
+  geom_vline(xintercept=0) +
+  geom_point() +
+  theme_minimal()
 
 
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+When using the covariance matrix, an analyst might overestimate the power of calories and sodium to explain most of the variation in the data. This is shown especially in the biplot and loadings for principal components 1 and 2. This effect is partially skewed since the units for the dimensions are not consistent. Since calories and sodium utilize a unit that puts their measurements about an order or two of magnitude higher, their importance is most likely over stated, as variances and covariances involving these measurements will naturally be higher. An analyst might try transforming some of the columns of data so that the magnitudes are more in line with one another and would hopefully allow for a more accurate principal component analysis.
 
 ---
+
+# End
+
 *Thanks!*
