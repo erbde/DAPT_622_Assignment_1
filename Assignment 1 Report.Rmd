@@ -2,7 +2,10 @@
 title: "DAPT 622 Assignment 1"
 author: "Daniel Erb"
 date: "January 14, 2019"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -12,11 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ---
 
 ```{r Load Libraries and Arrange Data, message = FALSE}
-#library(knitr)
 library(kableExtra)
-library(magrittr)
-library(DT)
-library(dplyr)
 library(corrplot)
 
 candy_data <- read.table("G:/My Drive/vcu/Spring 2019/Statistics/Assignments/Assignment 1/DAPT_622_Assignment_1/Assignment_Materials/CandyBars.txt",sep=',',header=TRUE)
@@ -33,9 +32,9 @@ cd_sub <- candy_data[,c("Oz.pkg","Calories","Total.fat.g"
 
 # Part 1 - Exploratory Data Analysis
 
-## Question 1
+Perform the following exploratory data analysis tasks:
 
-Perform the following exploratory data analysis tasks: 
+## Question 1
 
 1. Consider all of the numeric variables (i.e. all of the variables except Brand and Name): Determine the variance/covariance matrix and the correlation matrix of these variables.  Interpret briefly what you see.
 
@@ -108,9 +107,33 @@ The color map of the correlations show very similar results as the variance/cova
 4. Use a probability plot to assess the multivariate normality of the variables specified in #1.  Interpret.
 
 ```{r Probability Plot Creation}
-   
 
+x <- as.matrix(cd_sub)
+center <- colMeans(x)
+n <- nrow(x)
+p <- ncol(x)
+cov <- cov(x)
+d <- mahalanobis(x,center,cov)
+qqplot(qchisq(ppoints(n),df = p),d,
+       main = "QQ Plot Assessing Multivariate Normality",
+       ylab = "Mahalanobis D2",
+       xlab = "Expected value")
+abline(a = 0, b = 1)
 ```
+
+The multivariate probability plot shows the Mahalanobis distances aren't too far from the expected values below ~20. Above this point there are 5 candy bars that fall slightly outside the expected distances and another 2 that are well outside of the expected values. These 2 points would most likely need evaluation for their effects on any analysis performed.
+
+---
+
+# Part 2 - Principal Component Analysis
+
+Reconsider the candy bar data. Perform a Principal Component Analysis on this data by carrying out the following steps:
+
+## Section A
+
+### Subsection i
+
+Find and display the eigenvalues of the correlation matrix. Use these along with a Scree plot (and/or other means) to determine the number of principal components that are to be retained. How much of the variation in the data is explained by your chosen number of principal components? Remember that your goal is dimension reduction…so please be sensible in your choice of number of components
 
 ---
 *Thanks!*
