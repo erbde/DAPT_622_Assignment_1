@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r Load Libraries and Arrange Data, message = FALSE}
 library(kableExtra)
 library(corrplot)
-
+library(stats)
 candy_data <- read.table("G:/My Drive/vcu/Spring 2019/Statistics/Assignments/Assignment 1/DAPT_622_Assignment_1/Assignment_Materials/CandyBars.txt",sep=',',header=TRUE)
 
 cd_sub <- candy_data[,c("Oz.pkg","Calories","Total.fat.g"
@@ -134,6 +134,81 @@ Reconsider the candy bar data. Perform a Principal Component Analysis on this da
 ### Subsection i
 
 Find and display the eigenvalues of the correlation matrix. Use these along with a Scree plot (and/or other means) to determine the number of principal components that are to be retained. How much of the variation in the data is explained by your chosen number of principal components? Remember that your goal is dimension reduction…so please be sensible in your choice of number of components
+
+```{r Find eigenvalues and scree plot creation}
+
+#Compute the correlation matrix
+
+ ##recall corrmat from above
+
+#compute the eigenvalues and eigenvectors
+
+ev <- eigen(corrmat)
+ev$values
+ev$vectors
+
+pca <- prcomp(cd_sub, scale = TRUE)
+summary(pca)
+
+#(show plots)
+
+screeplot(pca, npcs = 14, type = "lines")
+
+#Loadings
+loadings <- pca$rotation
+loadings
+
+#Biplot
+biplot(pca)
+
+#Nicer plot of scores
+library(ggplot2)
+scores <- as.data.frame(pca$x)
+p <- ggplot(data=scores, aes(x=PC1, y=PC2)) 
+p + geom_hline(yintercept=0) + geom_vline(xintercept=0) + geom_point()
+
+#################################################################
+#################################################################
+#################################################################
+
+#Summarize and interpret
+
+
+
+#Compute and analyze scores
+
+## we are using the correlation matrix because the units are totally different from one another
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 *Thanks!*
