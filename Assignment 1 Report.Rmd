@@ -18,6 +18,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(kableExtra)
 library(corrplot)
 library(stats)
+library(factoextra)
+
 candy_data <- read.table("G:/My Drive/vcu/Spring 2019/Statistics/Assignments/Assignment 1/DAPT_622_Assignment_1/Assignment_Materials/CandyBars.txt",sep=',',header=TRUE)
 
 cd_sub <- candy_data[,c("Oz.pkg","Calories","Total.fat.g"
@@ -156,10 +158,6 @@ summary(pca)
 
 screeplot(pca, npcs = 14, type = "lines")
 
-
-#Biplot
-biplot(pca)
-
 ```
 
 
@@ -177,10 +175,30 @@ loadings
 
 ```
 
-Principal component 1 shows several major contributors. Calories, total fat, saturated fat, dietary fiber, and protein are the major positive contributors to this component while there are no seemingly significant negative contributors. This would seem to suggests, as we might suspect from previous candy intake, that a candy bars content of calories, total fat, saturated fat, dietary fiber, and protein are positively related in some way.
+Principal component 1 shows several major contributors. Calories, total fat, saturated fat, dietary fiber, and protein are the major positive contributors to this component while there are no seemingly significant negative contributors. This seems to suggests, as we might suspect from previous candy intake, that a candy bars content of calories, total fat, saturated fat, dietary fiber, and protein are positively related in some way.
 
-Principal component 2 shows only a few slightly positive values for carbohydrates and sugars. This is in conjunction with some stronger negative loadings for vitamin A, vitamin C, calcium, and iron. This would suggest that a candy bars carbohydrate and sugar contents are opposed to increased values of vitamin A, vitamin C, calcium and iron.
+Principal component 2 shows only a few slightly positive values for carbohydrates and sugars. This is in conjunction with some stronger negative loadings for vitamin A, vitamin C, calcium, and iron. This would suggest that a candy bars carbohydrate and sugar contents are opposed to increased values of vitamin A, vitamin C, calcium and iron. This might also make sense from our previous experience, as most people probably associate higher carbohydrate and sugar levels with lower vitamin and mineral content.
 
+### Subsection iii
+
+Construct a biplot of the loadings and scores for the first two principal components. For this plot, color the observations based on Brand.  Are there any natural groupings of the observations? Are there any unusual observations? 
+
+```{r biplot construction}
+
+#Biplot with vectors labelled
+fviz_pca_biplot(pca, col.var = "black")
+
+#candyBar_scores <- as.data.frame(pca$x)
+ggplot(data=as.data.frame(pca$x), aes(x=PC1, y=PC2,color = candy_data$Brand)) +
+  geom_hline(yintercept=0) + 
+  geom_vline(xintercept=0) +
+  geom_point() +
+  theme_minimal()
+
+
+```
+
+For most of the data there are no immediately obvious groupings of candy brands. This is with one exception for Weider and for Hershey. Two data points for Weider have high principal component 2 values while having very small principal component 1 values. Five candy bars standout for Hershey in highly positive principal component 1 values. These 7 points may well be the outliers we observed in the normal quantile plot above.
 
 
 
