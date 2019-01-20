@@ -147,6 +147,8 @@ ev <- eigen(corrmat)
 ev$values
 ev$vectors
 
+# scale = TRUE allows for correlation matrix to be utilized
+# FALSE would allow for covariance matrix to be utilized
 pca <- prcomp(cd_sub, scale = TRUE)
 summary(pca)
 
@@ -154,41 +156,30 @@ summary(pca)
 
 screeplot(pca, npcs = 14, type = "lines")
 
-#Loadings
-loadings <- pca$rotation
-loadings
 
 #Biplot
 biplot(pca)
 
-#Nicer plot of scores
-library(ggplot2)
-scores <- as.data.frame(pca$x)
-p <- ggplot(data=scores, aes(x=PC1, y=PC2)) 
-p + geom_hline(yintercept=0) + geom_vline(xintercept=0) + geom_point()
-
-#################################################################
-#################################################################
-#################################################################
-
-#Summarize and interpret
-
-
-
-#Compute and analyze scores
-
-## we are using the correlation matrix because the units are totally different from one another
-
 ```
 
 
+Considering the generated Scree plot as well as the biplot for the eigenvectors of the 14 principal components, 3 principal components should be kept. The first 3 principal components explain nearly 60% (0.5969) of the variability in the data, while keeping the number features relatively low.
 
+### Subsection ii
 
+Provide the loadings matrix.  What do you learn from this matrix? Using this matrix, and as best as possible, interpret the first two principal components (I will expect some interpretation).
 
+```{r loadings for pca}
 
+#Loadings
+loadings <- pca$rotation
+loadings
 
+```
 
+Principal component 1 shows several major contributors. Calories, total fat, saturated fat, dietary fiber, and protein are the major positive contributors to this component while there are no seemingly significant negative contributors. This would seem to suggests, as we might suspect from previous candy intake, that a candy bars content of calories, total fat, saturated fat, dietary fiber, and protein are positively related in some way.
 
+Principal component 2 shows only a few slightly positive values for carbohydrates and sugars. This is in conjunction with some stronger negative loadings for vitamin A, vitamin C, calcium, and iron. This would suggest that a candy bars carbohydrate and sugar contents are opposed to increased values of vitamin A, vitamin C, calcium and iron.
 
 
 
